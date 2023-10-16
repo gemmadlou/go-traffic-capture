@@ -1,0 +1,12 @@
+# For more information: https://laravel.com/docs/sail
+version: "3.7"
+
+services:
+
+  es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.3
+    ports:
+      - 9200:9200
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false

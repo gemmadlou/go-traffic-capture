@@ -8,13 +8,11 @@ Setup local ES server
 docker compose up -d
 ```
 
-Create new index
+Test http request
 
 ```bash
-curl -X PUT http://localhost:9200/traffic
+http http://localhost:9990/eskimo data=123  'Cookie: Me'
 ```
-
-> Returns `{"acknowledged":true,"shards_acknowledged":true,"index":"traffic"}`
 
 ## Resources
 
@@ -23,8 +21,14 @@ curl -X PUT http://localhost:9200/traffic
 - Elasticsearch setup. https://geshan.com.np/blog/2023/06/elasticsearch-docker/
 ```bash
 # Create example traffic
-curl -X POST -H 'Content-Type: application/json' -d '{ "request_uri": "/hello-world", "base_url": "https://example.com", "headers": [] }' http://localhost:9200/traffic/_doc
+curl -X POST -H 'Content-Type: application/json' -d '{ "request_uri": "/hello-world", "base_url": "https://example.com", "headers": [], "body": {} }' http://localhost:9200/traffic/_doc
 
 # Get traffic
 curl -X GET "localhost:9200/traffic/_search"
+```
+- Create json data. https://www.digitalocean.com/community/tutorials/how-to-use-json-in-go
+- https://christiangiacomi.com/posts/simple-put-patch-request-go/
+- https://opster.com/guides/elasticsearch/how-tos/elasticsearch-delete-index/
+```bash
+curl -X DELETE "http://localhost:9200/traffic"
 ```
