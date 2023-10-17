@@ -92,3 +92,4 @@ curl -X DELETE "http://localhost:9200/traffic"
 - Timestamp. https://yourbasic.org/golang/current-time/
 - Elastcsearh data format. https://stackoverflow.com/questions/38790030/elasticsearch-date-format
 - Dockering Go. https://docs.docker.com/language/golang/build-images/
+- Publish Docker onto GitHub packages. https://docs.github.com/en/actions/publishing-packages/publishing-docker-images#publishing-images-to-github-packages
