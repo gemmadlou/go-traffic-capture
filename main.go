@@ -25,20 +25,19 @@ func main() {
 			log.Fatalln(err)
 		}
 
-		fmt.Println(os.Getenv("HIDE_HEADER"))
 		hideableHeader := os.Getenv("HIDE_HEADER")
 		if hideableHeader != "" {
 			r.Header.Set(hideableHeader, "OBFUSCATED")
 		}
 
-		var x map[string]interface{}
-
-		json.Unmarshal([]byte(body), &x)
+		var jsonBody map[string]interface{}
+		json.Unmarshal([]byte(body), &jsonBody)
 
 		data := map[string]interface{}{
+			"app_url":     os.Getenv("APP_URL"),
 			"method":      r.Method,
 			"headers":     r.Header,
-			"body":        x,
+			"body":        jsonBody,
 			"request_uri": r.RequestURI,
 		}
 
@@ -55,6 +54,9 @@ func main() {
 		}
 
 		req.Header.Set("Content-Type", "application/json")
+		if os.Getenv("AUTH") == "basic" {
+			req.SetBasicAuth(os.Getenv("AUTH_USERNAME"), os.Getenv("AUTH_PASSWORD"))
+		}
 
 		client := &http.Client{}
 
