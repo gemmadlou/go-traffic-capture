@@ -50,6 +50,23 @@ AUTH_USERNAME=username
 AUTH_PASSWORD=password
 ```
 
+## Running the Dockerised app
+
+Build the docker container
+
+```bash
+docker build . -t go-traffic-capture
+```
+
+Run the dockerised app.
+
+```bash
+docker run --rm -p 9990:9990 \
+    --env-file ./.env \
+    -e ENVIRONMENT=production \
+    go-traffic-capture
+```
+
 ## Resources
 
 - Http server - https://www.digitalocean.com/community/tutorials/how-to-deploy-a-go-web-application-using-nginx-on-ubuntu-18-04
@@ -74,3 +91,4 @@ curl -X DELETE "http://localhost:9200/traffic"
 - https://www.alexedwards.net/blog/basic-authentication-in-go
 - Timestamp. https://yourbasic.org/golang/current-time/
 - Elastcsearh data format. https://stackoverflow.com/questions/38790030/elasticsearch-date-format
+- Dockering Go. https://docs.docker.com/language/golang/build-images/
