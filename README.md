@@ -72,3 +72,6 @@ curl -X GET "localhost:9200/traffic/_search"
 curl -X DELETE "http://localhost:9200/traffic"
 ```
 - https://www.alexedwards.net/blog/basic-authentication-in-go
+- Timestamp. https://yourbasic.org/golang/current-time/
+- Elastcsearh data format. https://stackoverflow.com/questions/38790030/elasticsearch-date-format
+- 

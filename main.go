@@ -8,12 +8,15 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/joho/godotenv"
 )
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		currentTime := time.Now()
+
 		err := godotenv.Load()
 		if os.Getenv("ENVIRONMENT") != "production" && err != nil {
 			log.Fatal("Error loading .env file")
@@ -39,6 +42,7 @@ func main() {
 			"headers":     r.Header,
 			"body":        jsonBody,
 			"request_uri": r.RequestURI,
+			"_timestamp":  currentTime.UTC().Format("2006-01-02T15:04:05-0700"),
 		}
 
 		jsonData, err := json.Marshal(data)
