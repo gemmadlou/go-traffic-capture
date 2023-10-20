@@ -4,6 +4,8 @@ A simple Go server to capture traffic and send it to Elasticsearch. The main ide
 when mirroring traffic, it'll allow you to capture the body and headers for monitoring
 or replaying events against a test environment.
 
+![](./docs/elastic-search-example.jpg)
+
 ## Toolset
 
 - [DB Snapshot Replication](https://github.com/gemmadlou/go-db-snapshot-replication)
@@ -66,6 +68,61 @@ docker run --rm -p 9990:9990 \
     -e ENVIRONMENT=production \
     go-traffic-capture
 ```
+
+## Nginx Mirror Config
+
+The mirrored service requires its own block:
+
+```nginx
+location = /mirror {
+    internal;
+    proxy_pass http://127.0.0.1:9990$request_uri;
+}
+```
+
+The mirror directive needs to go into the location block that points to the application. Here's a PHP example:
+
+```nginx
+location ~ \.php$ {
+    mirror /mirror;
+```
+
+Here's a full example with a PHP Laravel reverse proxy that uses fastcgi.
+
+```nginx
+server {
+    listen 80;
+    index index.php index.html;
+    server_name localhost;
+
+    error_log  /var/log/nginx/error.log;
+    access_log /var/log/nginx/access.log;
+
+    root /code/public;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+        gzip_static on;
+    }
+
+    location ~ \.php$ {
+        mirror /mirror;
+        try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass localhost:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+    }
+
+    location = /mirror {
+        internal;
+        proxy_pass http://127.0.0.1:9990$request_uri;
+    }
+}
+```
+
 
 ## Resources
 
